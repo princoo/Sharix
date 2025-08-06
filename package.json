@@ -7,20 +7,26 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+    "prisma:generate-user": "tsx src/prisma/scripts/createTestUser.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
     "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
     "next": "15.4.5",
     "next-auth": "^5.0.0-beta.29",
+    "nodemailer": "^6.10.1",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.19.9",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
