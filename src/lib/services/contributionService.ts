@@ -1,5 +1,6 @@
 import { ContributionData } from "@/types/contribution";
 import { prisma } from "../db";
+import { getActiveSharePrice } from "./shareSettingService";
 
 export async function createContribution(data: ContributionData) {
   const result = await prisma.contribution.create({
@@ -42,6 +43,7 @@ export async function getContributionSummary(startDate: Date, endDate: Date) {
       },
     },
   });
+  const sharePrice = await getActiveSharePrice();
 
   return members.map((member) => {
     const totalPaid = member.contributions.reduce(
@@ -49,22 +51,27 @@ export async function getContributionSummary(startDate: Date, endDate: Date) {
       0
     );
 
-    const requiredAmount = Number(member.monthlyShareCommitment) * 10000; // assumming a single share is 10,000
+    const singleSharePrice = Number(sharePrice?.sharePrice) || 0;
+    const requiredAmount =
+      Number(member.monthlyShareCommitment) * singleSharePrice;
+
+    const remainingAmount = Math.max(requiredAmount - totalPaid, 0);
+
     let status = "Pending";
     if (totalPaid >= requiredAmount) {
-      // if (totalPaid >= Number(member.monthlyShareCommitment)) {
       status = "Complete";
     } else if (totalPaid > 0) {
       status = "Partial";
     }
 
-    // return {startDate,endDate}
     return {
       memberId: member.id,
-      // name: member.user.name,
       email: member.user.email,
       totalPaid,
-      commitment: member.monthlyShareCommitment,
+      sharePrice: singleSharePrice,
+      commitmentShares: member.monthlyShareCommitment,
+      requiredAmount,
+      remainingAmount,
       status,
     };
   });

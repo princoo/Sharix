@@ -75,10 +75,8 @@ export async function approve(
 }
 
 export async function getSummary(req: Request) {
-  // const searchParams = req.nextUrl.searchParams;
-  // const month = searchParams.get("month");
   const url = new URL(req.url);
-  const month = url.searchParams.get("month"); // e.g. 2025-01
+  const month = url.searchParams.get("month");
   const parsed = contributionSummarySchema.safeParse({ month });
 
   if (!parsed.success) {
@@ -94,16 +92,13 @@ export async function getSummary(req: Request) {
 }
 
 export const myContributions = async (
-  req: Request,
+  _req: Request,
   { session }: { session: User & { role: string } }
 ) => {
-  try {
     const contributions = await getMemberContributions(session.Profile.id);
     return jsonResponse(contributions, {
       message: "My contributions fetched",
       status: 200,
     });
-  } catch (error) {
-    return errorResponse("Failed to fetch contributions", 500);
-  }
+
 };
