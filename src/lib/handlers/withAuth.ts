@@ -2,7 +2,6 @@
 import { errorResponse } from "../response";
 import { getServerSessionUSer } from "../services/auth";
 
-
 type Handler = (
   req: Request,
   ctx?:any 

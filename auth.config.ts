@@ -8,6 +8,7 @@ session: {
     async jwt({ token, user }) {
       if (user) {
         token.role = user.role;
+        token.profile = user.Profile;
         token.id = user.id;
       }
       return token;
@@ -16,6 +17,7 @@ session: {
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.Profile = token.profile as { id: string };
       }
       return session;
     },
