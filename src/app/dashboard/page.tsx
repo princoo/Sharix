@@ -6,10 +6,7 @@ import { Navigation } from "@/components/layouts/Navigation"
 import { RolesEnum } from "@/enum/role"
 import ManagerDashboard from "@/components/dashboard/manager-dashboard"
 import MemberDashboard from "@/components/dashboard/member-dashboard"
-// import { Navigation } from "@/components/layout/navigation"
 
-// import ManagerDashboard from "@/components/dashboard/manager-dashboard"
-// import MemberDashboard from "@/components/dashboard/member-dashboard"
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -18,7 +15,7 @@ export default async function DashboardPage() {
     redirect("/auth/login")
   }
 
-  const userRole = session.user.role
+  const userRole = session?.user.role
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -5,6 +5,10 @@ import bcrypt from "bcryptjs";
 import { authConfig } from "./auth.config";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
+  // set up sign in page
+  pages: {
+    signIn: "/auth/login",
+  },
   providers: [
     Credentials({
       name: "credentials",

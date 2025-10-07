@@ -46,9 +46,7 @@ export function RecentActivity({ refreshTrigger }: RecentActivityProps) {
   const fetchRecentActivity = async () => {
     try {
       const token = localStorage.getItem("auth_token")
-      const response = await fetch("/api/dashboard/activity", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      const response = await fetch("/api/contribution/summary?month=2026-11")
 
       if (response.ok) {
         const data = await response.json()

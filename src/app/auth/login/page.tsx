@@ -18,6 +18,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { AuthCheck } from "../components/auth-check";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import Logo from "@/components/shares/logo";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -41,18 +42,14 @@ export default function LoginPage() {
 
   return (
     <AuthCheck requireAuth={false}>
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">
-              Sign in to your account
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Contribution Management System
-            </p>
+          <div className="flex flex-col items-center gap-2">
+            <Logo size={40} className="text-primary"/>
+            <h2 className="text-3xl font-bold">Sharix</h2>
           </div>
 
-          <Card>
+          <Card className="shadow-none">
             <CardHeader>
               <CardTitle>Login</CardTitle>
               <CardDescription>
@@ -62,7 +59,7 @@ export default function LoginPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                  <Alert variant="destructive">
+                  <Alert variant="destructive" className="bg-destructive/10 border-destructive/40">
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
@@ -91,7 +88,7 @@ export default function LoginPage() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/80" disabled={loading}>
                   {loading ? (
                     <>
                       <LoadingSpinner size="sm" className="mr-2" />

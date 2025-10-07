@@ -3,12 +3,12 @@ import { ProtectedRoute } from "@/types/routes";
 import { Home } from "lucide-react";
 
 export const protectedRoutes: ProtectedRoute[] = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: Home,
-    role: [RolesEnum.MANAGER, RolesEnum.MEMBER, RolesEnum.BOARD],
-  },
+  // {
+  //   title: "Dashboard",
+  //   url: "/dashboard",
+  //   icon: Home,
+  //   role: [RolesEnum.MANAGER, RolesEnum.MEMBER, RolesEnum.BOARD],
+  // },
 //   {
 //     title: "Productivity Scorecard",
 //     url: "/dashboard/productivity-scorecard",
@@ -71,4 +71,4 @@ export const protectedRoutes: ProtectedRoute[] = [
 //   },
 ];
 
-export const publicPaths = ["/", "/auth/login", "/auth/setup-password", "/unauthorized"];
+export const publicPaths = ["/", "/auth/login", "/auth/setup-password", "/unauthorized","/dashboard"];
