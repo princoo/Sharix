@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 
 export async function sendMail({
   email,
-  sendTo,
   subject,
   text,
   html,
@@ -30,13 +29,14 @@ export async function sendMail({
   html?: string;
 }) {
   try {
-     await transporter.verify();
+    await transporter.verify();
   } catch (error) {
+    /* eslint-disable no-console */
     console.error(
       "Something Went Wrong",
       SMTP_SERVER_USERNAME,
       SMTP_SERVER_PASSWORD,
-      error
+      error,
     );
     return;
   }

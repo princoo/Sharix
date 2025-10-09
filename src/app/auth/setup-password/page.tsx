@@ -16,7 +16,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { AuthCheck } from "../components/auth-check";
-import Logo from "@/components/shares/logo";
+import Logo from "@/components/custom/logo";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
