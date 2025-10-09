@@ -4,17 +4,21 @@ import { protectedRoutes, publicPaths } from "@/lib/constants/routes";
 import { RolesEnum } from "@/enum/role";
 
 export default auth(async function middleware(req) {
-  const user = req.auth;
+  // const user = req.auth;
   const { pathname } = req.nextUrl;
 
   const isAuthenticated = !!req.auth;
   const authenticatedRole = req.auth?.user?.role as RolesEnum;
 
-  console.log(pathname)
   // 1. Allow public routes
   if (publicPaths.includes(pathname)) {
     // If user is logged in and tries to access login/register, redirect to dashboard
-    if (isAuthenticated && ["/auth/login", "/auth/setup-password"].includes(pathname)) {
+    if (
+      isAuthenticated &&
+      ["/auth/login", "/auth/setup-password", "/auth/setup-password"].includes(
+        pathname,
+      )
+    ) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
     return NextResponse.next();
@@ -31,10 +35,10 @@ export default auth(async function middleware(req) {
       } else {
         // Authenticated but unauthorized
         const errorMessage = encodeURIComponent(
-          "You don't have permission to access this page"
+          "You don't have permission to access this page",
         );
         return NextResponse.redirect(
-          new URL(`/unauthorized?error=${errorMessage}`, req.url)
+          new URL(`/unauthorized?error=${errorMessage}`, req.url),
         );
       }
     } else {
@@ -44,7 +48,7 @@ export default auth(async function middleware(req) {
   }
 
   // 3. User is not authenticated
-  return NextResponse.redirect(new URL("/login", req.url));
+  return NextResponse.redirect(new URL("/auth/login", req.url));
   //     // Role-based route protection
   //     const userRole = ?.role as string;
 

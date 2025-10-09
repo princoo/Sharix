@@ -1,4 +1,4 @@
-import { ContributionData } from "@/types/contribution";
+import { ContributionData } from "@/lib/types/contribution";
 import { prisma } from "../db";
 import { getActiveSharePrice } from "./shareSettingService";
 
@@ -12,7 +12,7 @@ export async function createContribution(data: ContributionData) {
 
 export async function approveContribution(
   recordId: string,
-  approverId: string
+  approverId: string,
 ) {
   const data = await prisma.contribution.update({
     where: { id: recordId },
@@ -48,7 +48,7 @@ export async function getContributionSummary(startDate: Date, endDate: Date) {
   return members.map((member) => {
     const totalPaid = member.contributions.reduce(
       (sum, c) => sum + Number(c.amountPaid),
-      0
+      0,
     );
 
     const singleSharePrice = Number(sharePrice?.sharePrice) || 0;
