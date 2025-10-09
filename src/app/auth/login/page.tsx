@@ -19,6 +19,7 @@ import { AuthCheck } from "../components/auth-check";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Logo from "@/components/shares/logo";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -45,7 +46,9 @@ export default function LoginPage() {
       <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="flex flex-col items-center gap-2">
-            <Logo size={40} className="text-primary"/>
+            <Link href="/" className="flex items-center gap-2">
+              <Logo size={40} className="text-primary" />
+            </Link>
             <h2 className="text-3xl font-bold">Sharix</h2>
           </div>
 
@@ -59,7 +62,10 @@ export default function LoginPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                  <Alert variant="destructive" className="bg-destructive/10 border-destructive/40">
+                  <Alert
+                    variant="destructive"
+                    className="bg-destructive/10 border-destructive/40"
+                  >
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
@@ -88,7 +94,11 @@ export default function LoginPage() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/80" disabled={loading}>
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/80"
+                  disabled={loading}
+                >
                   {loading ? (
                     <>
                       <LoadingSpinner size="sm" className="mr-2" />
