@@ -1,148 +1,226 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
-// import { useAuth } from "@/hooks/use-auth"
-// import { AuthCheck } from "@/components/auth/auth-check"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { AuthCheck } from "../components/auth-check"
-// import { LoadingSpinner } from "@/components/ui/loading-spinner"
+import type React from "react";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { AuthCheck } from "../components/auth-check";
+import Logo from "@/components/shares/logo";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  setUpPasswordData,
+  setUpPasswordSchema,
+} from "@/utils/schemas/setup-password-schema";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useSetupPasswordMutation } from "@/lib/services/clientHooks/setupPassword";
+import { toast } from "sonner";
 
 export default function SetupPasswordPage() {
-  const [name, setName] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [token, setToken] = useState("")
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [error, setError] = useState("");
+  const [token, setToken] = useState("");
+  const [setUpPassword, { isLoading }] = useSetupPasswordMutation();
 
-  const searchParams = useSearchParams()
-  // const { setupPassword } = useAuth()
+  const form = useForm<setUpPasswordData>({
+    resolver: zodResolver(setUpPasswordSchema),
+  });
 
   useEffect(() => {
-    const inviteToken = searchParams.get("token")
+    const inviteToken = searchParams.get("token");
     if (inviteToken) {
-      setToken(inviteToken)
+      setToken(inviteToken);
     } else {
-      setError("Invalid invitation link")
+      setError("Invalid invitation link");
     }
-  }, [searchParams])
+  }, [searchParams]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match")
-      return
+  const onSubmit = async (data: setUpPasswordData) => {
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    const { confirmPassword, ...rest } = data;
+    try {
+      await setUpPassword({
+        token,
+        userData: rest,
+      }).unwrap();
+      toast.success("Account setup successful!");
+      router.push("/auth/login");
+    } catch (error) {
+      toast.error("Failed to set up account. Please try again.");
     }
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters long")
-      return
-    }
-
-    setLoading(true)
-
-    // const result = await setupPassword(token, password, name)
-
-    // if (!result.success) {
-    //   setError(result.error || "Password setup failed")
-    // }
-
-    setLoading(false)
-  }
+  };
 
   if (!token && !error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner />
       </div>
-    )
+    );
   }
 
   return (
     <AuthCheck requireAuth={false}>
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
-            <h2 className="mt-6 text-3xl font-bold text-gray-900">Complete Your Account Setup</h2>
-            <p className="mt-2 text-sm text-gray-600">Set your password to get started</p>
+          <div className="text-center flex justify-center">
+            <Logo size={40} className="text-primary" />
           </div>
 
           <Card>
             <CardHeader>
               <CardTitle>Account Setup</CardTitle>
-              <CardDescription>Enter your details to complete your account setup</CardDescription>
+              <CardDescription>
+                Enter your details to complete your account setup
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                    minLength={8}
-                  />
-                  <p className="text-sm text-gray-500">Password must be at least 8 characters long</p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
-                </div>
-
-                <Button type="submit" className="w-full" disabled={loading || !token}>
-                  {loading ? (
-                    <>
-                      <LoadingSpinner size="sm" className="mr-2" />
-                      Setting up account...
-                    </>
-                  ) : (
-                    "Complete Setup"
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
                   )}
-                </Button>
-              </form>
+
+                  <FormField
+                    control={form.control}
+                    name="monthlyShareCommitment"
+                    render={({ field }) => (
+                      <FormItem className=" p-0 gap-2">
+                        <FormLabel className="font-normal">
+                          <div className="flex gap-1 justify-between items-center w-full">
+                            <Label className="text-sm font-normal">
+                              Monthly Share Commitment
+                            </Label>
+                            <span className="text-xs font-normal text-muted-foreground">
+                              (2000 RWF/Share)
+                            </span>
+                          </div>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter your share commitment"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) =>
+                              field.onChange(Number(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                        <span className="text-xs text-muted-foreground">
+                          ({(form.watch("monthlyShareCommitment") ?? 0) * 2000}
+                          &nbsp;RWF) This will be your monthly contribution
+                        </span>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-normal">
+                          Phone Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Enter your phone number"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-normal">Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Enter your password"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-normal">
+                          Confirm Password
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Confirm your password"
+                            {...field}
+                            value={field.value || ""}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isLoading || !token}
+                  >
+                    {isLoading ? (
+                      <>
+                        <LoadingSpinner size="sm" className="mr-2" />
+                        Setting up account...
+                      </>
+                    ) : (
+                      "Complete Setup"
+                    )}
+                  </Button>
+                </form>
+              </Form>
             </CardContent>
           </Card>
         </div>
       </div>
     </AuthCheck>
-  )
+  );
 }

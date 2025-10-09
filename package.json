@@ -7,6 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "prepare": "husky",
+    "prettier": "prettier --write .",
+    "prettier:check": "prettier --check .",
     "prisma:seed": "prisma db seed",
     "prisma:generate-user": "tsx src/prisma/scripts/createTestUser.ts"
   },
@@ -28,6 +32,7 @@
     "@radix-ui/react-toggle": "^1.1.9",
     "@radix-ui/react-toggle-group": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.7",
+    "@reduxjs/toolkit": "^2.9.0",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.7.0",
@@ -37,11 +42,15 @@
     "lucide-react": "^0.539.0",
     "next": "15.4.5",
     "next-auth": "^5.0.0-beta.29",
+    "next-themes": "^0.4.6",
     "nodemailer": "^6.10.1",
     "react": "19.1.0",
     "react-day-picker": "^9.8.1",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "zod": "^3.25.76"
   },
@@ -55,6 +64,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3",
+    "prettier": "^3.6.2",
     "prisma": "^6.13.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.3",
@@ -64,5 +76,14 @@
   "prisma": {
     "seed": "tsx src/prisma/seed.ts",
     "schema": "src/prisma/schema.prisma"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }
