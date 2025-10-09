@@ -4,7 +4,6 @@ import { protectedRoutes, publicPaths } from "@/lib/constants/routes";
 import { RolesEnum } from "@/enum/role";
 
 export default auth(async function middleware(req) {
-  // const user = req.auth;
   const { pathname } = req.nextUrl;
 
   const isAuthenticated = !!req.auth;
@@ -47,34 +46,7 @@ export default auth(async function middleware(req) {
     }
   }
 
-  // 3. User is not authenticated
   return NextResponse.redirect(new URL("/auth/login", req.url));
-  //     // Role-based route protection
-  //     const userRole = ?.role as string;
-
-  //     // Manager-only routes
-  //     const managerRoutes = [
-  //       "/dashboard/users",
-  //       "/dashboard/manage-shares",
-  //       "/dashboard/manage-payments",
-  //     ];
-  //     if (
-  //       managerRoutes.some((route) => pathname.startsWith(route)) &&
-  //       userRole !== "manager"
-  //     ) {
-  //       return NextResponse.redirect(new URL("/dashboard", req.url));
-  //     }
-
-  //     // Member-only routes
-  //     const memberRoutes = ["/dashboard/my-shares", "/dashboard/my-payments"];
-  //     if (
-  //       memberRoutes.some((route) => pathname.startsWith(route)) &&
-  //       userRole !== "member"
-  //     ) {
-  //       return NextResponse.redirect(new URL("/dashboard", req.url));
-  //     }
-
-  //     return NextResponse.next();
 });
 
 export const config = {
