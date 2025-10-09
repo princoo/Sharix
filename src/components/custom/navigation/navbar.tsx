@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { NavLinks } from "./nav-links";
 import { NavActions } from "./nav-actions";
-import Logo from "@/components/shares/logo";
+import Logo from "@/components/custom/logo";
 
 export function Navbar() {
   return (

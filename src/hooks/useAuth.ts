@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useSession, signIn, signOut } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function useAuth() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const login = async (email: string, password: string) => {
     try {
@@ -13,24 +13,28 @@ export function useAuth() {
         email,
         password,
         redirect: false,
-      })
+      });
 
       if (result?.error) {
-        return { success: false, error: "Invalid credentials" }
+        return { success: false, error: "Invalid credentials" };
       }
 
-      return { success: true }
-    } catch (error) {
-      return { success: false, error: "Network error occurred" }
+      return { success: true };
+    } catch {
+      return { success: false, error: "Network error occurred" };
     }
-  }
+  };
 
   const logout = async () => {
-    await signOut({ redirect: false })
-    router.push("/auth/login")
-  }
+    await signOut({ redirect: false });
+    router.push("/auth/login");
+  };
 
-  const setupPassword = async (token: string, password: string, name: string) => {
+  const setupPassword = async (
+    token: string,
+    password: string,
+    name: string,
+  ) => {
     try {
       const response = await fetch("/api/auth/setup-password", {
         method: "POST",
@@ -38,9 +42,9 @@ export function useAuth() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ token, password, name }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
         // After successful password setup, sign in the user
@@ -48,20 +52,23 @@ export function useAuth() {
           email: data.user.email,
           password: password,
           redirect: false,
-        })
+        });
 
         if (loginResult?.error) {
-          return { success: false, error: "Setup successful but login failed" }
+          return { success: false, error: "Setup successful but login failed" };
         }
 
-        return { success: true }
+        return { success: true };
       } else {
-        return { success: false, error: data.message || "Password setup failed" }
+        return {
+          success: false,
+          error: data.message || "Password setup failed",
+        };
       }
-    } catch (error) {
-      return { success: false, error: "Network error occurred" }
+    } catch {
+      return { success: false, error: "Network error occurred" };
     }
-  }
+  };
 
   return {
     user: session?.user || null,
@@ -69,5 +76,5 @@ export function useAuth() {
     login,
     logout,
     setupPassword,
-  }
+  };
 }

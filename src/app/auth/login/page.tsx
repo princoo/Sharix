@@ -18,7 +18,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { AuthCheck } from "../components/auth-check";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import Logo from "@/components/shares/logo";
+import Logo from "@/components/custom/logo";
 import Link from "next/link";
 
 export default function LoginPage() {

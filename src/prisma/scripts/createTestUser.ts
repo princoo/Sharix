@@ -16,8 +16,6 @@ async function main() {
       },
     },
   });
-
-  console.log("User created.");
 }
 
 main();
