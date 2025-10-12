@@ -31,9 +31,9 @@ export function AuthCheck({ children, requireAuth = true }: AuthCheckProps) {
     } else if (!requireAuth && sessionData?.user) {
       // Redirect authenticated users to dashboard based on role
       if (sessionData?.user.role === RolesEnum.MANAGER) {
-        router.push("/dashboard/manager");
+        router.push("/dashboard");
       } else {
-        router.push("/dashboard/member");
+        router.push("/dashboard");
       }
     }
     // }

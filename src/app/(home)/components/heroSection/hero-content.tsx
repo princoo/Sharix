@@ -17,7 +17,7 @@ export function HeroContent() {
 
       <div className="flex flex-wrap gap-4">
         <Button size="lg" className="bg-primary hover:bg-primary/90" asChild>
-          <Link href="#get-started">Get Started</Link>
+          <Link href="/auth/login">Get Started</Link>
         </Button>
         <Button
           size="lg"
@@ -25,7 +25,7 @@ export function HeroContent() {
           className="bg-muted hover:bg-muted/80"
           asChild
         >
-          <Link href="/login">Login</Link>
+          <Link href="/auth/login">Login</Link>
         </Button>
       </div>
     </div>

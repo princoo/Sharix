@@ -37,7 +37,7 @@ export default function LoginPage() {
     if (!result.success) {
       setError(result.error || "Login failed");
     }
-    router.push("/dashboard/manager");
+    router.push("/dashboard");
     setLoading(false);
   };
 
