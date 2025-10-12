@@ -5,7 +5,6 @@ import bcrypt from "bcryptjs";
 import { authConfig } from "./auth.config";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
-  // set up sign in page
   pages: {
     signIn: "/auth/login",
   },
@@ -26,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const isValid = await bcrypt.compare(
           credentials!.password as string,
-          user.password
+          user.password,
         );
 
         if (!isValid) return null;
@@ -39,4 +38,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  trustHost: true,
 });

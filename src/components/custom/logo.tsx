@@ -1,5 +1,4 @@
 import { Shapes } from "lucide-react";
-import Link from "next/link";
 import React from "react";
 export default function Logo({
   className,
@@ -10,11 +9,7 @@ export default function Logo({
 }) {
   return (
     <div className={className}>
-      {" "}
-      <Link href="/">
-        {" "}
-        <Shapes size={size} />{" "}
-      </Link>{" "}
+      <Shapes size={size} />
     </div>
   );
 }
