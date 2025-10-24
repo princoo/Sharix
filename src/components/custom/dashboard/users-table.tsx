@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -83,6 +84,7 @@ const usersData = [
 
 export function UsersTable() {
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   const filteredUsers = usersData.filter(
     (user) =>
@@ -108,7 +110,7 @@ export function UsersTable() {
       <CardHeader>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <CardTitle className="text-primary text-lg">Users</CardTitle>
+            <CardTitle>Users</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
               Manage and view all registered users
             </p>
@@ -141,7 +143,11 @@ export function UsersTable() {
             <TableBody>
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => (
-                  <TableRow key={user.id}>
+                  <TableRow
+                    key={user.id}
+                    onClick={() => router.push(`/dashboard/users/${user.id}`)}
+                    className="cursor-pointer hover:bg-muted/50 transition-colors"
+                  >
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell className="text-muted-foreground">
                       {user.email}
@@ -159,7 +165,7 @@ export function UsersTable() {
                       })}
                     </TableCell>
                     <TableCell className="text-right font-medium">
-                      {user.totalContributions.toLocaleString()} &nbsp;RWF
+                      {user.totalContributions.toLocaleString()}&nbsp;RWF
                     </TableCell>
                   </TableRow>
                 ))
